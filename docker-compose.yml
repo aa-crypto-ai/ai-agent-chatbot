@@ -7,9 +7,7 @@ services:
       context: .
       dockerfile: ollama.dockerfile
     volumes:
-      - type: bind
-        source: /root/.ollama
-        target: /root/.ollama
+      - /root/.ollama:/root/.ollama
     deploy:
       resources:
         reservations:
