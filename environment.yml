@@ -1,0 +1,22 @@
+name: chatbot
+channels:
+  - defaults
+  - conda-forge
+
+dependencies:
+  - python=3.12.8
+  - pip
+  - jupyter=1.1.1
+  - langchain=0.3.20
+  - langchain-community=0.3.19
+  - langgraph=0.3.5
+  - numpy=1.26.4
+  - pandas=2.2.3
+  - python-dotenv=1.0.1
+  
+  - pip:
+    - gradio==5.20.1
+    - ipython==9.0.1
+    - ollama==0.4.7
+    - semantic-router==0.0.72
+    - tavily-python==0.5.1
