@@ -61,8 +61,10 @@ class AgentAction(BaseModel):
     @classmethod
     def from_ollama(cls, ollama_response: dict):
         try:
-            # parse the output
-            output = json.loads(ollama_response["message"]["content"])
+            # parse the output, in case there are other texts beyond the json
+            json_start = ollama_response.index("{")
+            json_end = len(ollama_response) - ollama_response[::-1].index("}")
+            output = json.loads(ollama_response[json_start:json_end])
             return cls(
                 tool_name=output["name"],
                 tool_input=output["parameters"],
@@ -150,7 +152,8 @@ def call_llm(user_input: str, chat_history: list[dict], intermediate_steps: list
         messages=messages,
         format="json",
     )
-    return AgentAction.from_ollama(res)
+    content = res['message']['content']
+    return AgentAction.from_ollama(content)
 
 
 
