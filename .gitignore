@@ -1,8 +1,5 @@
 # partially taken from https://github.com/github/gitignore/blob/main/Python.gitignore
 
-# storing the OpenRouter API Key
-master.env
-
 # gradio key
 .gradio
 
