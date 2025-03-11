@@ -61,8 +61,10 @@ class AgentAction(BaseModel):
     @classmethod
     def from_ollama(cls, ollama_response: str):
         try:
-            # parse the output
-            output = json.loads(ollama_response)
+            # parse the output, in case there are other texts beyond the json
+            json_start = ollama_response.index("{")
+            json_end = len(ollama_response) - ollama_response[::-1].index("}")
+            output = json.loads(ollama_response[json_start:json_end])
             return cls(
                 tool_name=output["name"],
                 tool_input=output["parameters"],
