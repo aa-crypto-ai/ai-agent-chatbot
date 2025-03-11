@@ -10,7 +10,7 @@ Note: for some weaker model, it may fail to generate a json response for parsing
 
 # TODO
 
-1. Deploy to AWS
+1. Deploy to AWS [Done], currently used nginx, could consider kubernetes later
 2. More available LLM models
 3. Allow both ollama (local) and OpenRouter API LLM inference provider
 4. Front-end using Vue instead of gradio
