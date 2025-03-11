@@ -18,7 +18,7 @@ def search(query):
         client = TavilyClient(TAVILY_API_KEY)
         response = client.search(
             query=query,
-            max_results=3,
+            max_results=10,
             include_answer="basic",
         )
         results = []
