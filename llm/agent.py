@@ -4,10 +4,10 @@ import json
 from pydantic import BaseModel
 from semantic_router.utils.function_call import FunctionSchema
 from langchain_core.messages import BaseMessage
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, END
-import ollama
 
-from utils import OLLAMA_HOST
+from utils.langchain_adapter import ChatOpenRouter
 from search_engine.tavily import search
 
 system_prompt = """You are the oracle, the great AI decision maker.
@@ -59,10 +59,10 @@ class AgentAction(BaseModel):
     tool_output: str | None = None
 
     @classmethod
-    def from_ollama(cls, ollama_response: dict):
+    def from_ollama(cls, ollama_response: str):
         try:
             # parse the output
-            output = json.loads(ollama_response["message"]["content"])
+            output = json.loads(ollama_response)
             return cls(
                 tool_name=output["name"],
                 tool_input=output["parameters"],
@@ -144,13 +144,31 @@ def call_llm(user_input: str, chat_history: list[dict], intermediate_steps: list
         *scratchpad,
     ]
 
-    client = ollama.Client(host=OLLAMA_HOST)
-    res = client.chat(
-        model=model_name,
-        messages=messages,
-        format="json",
-    )
-    return AgentAction.from_ollama(res)
+    ##### TODO: merge both local ollama and OpenRouter API later
+
+    # these are converted for OpenRouter API purpose
+    history_langchain_format = []
+    for msg in messages:
+        if msg['role'] == "user":
+            history_langchain_format.append(HumanMessage(content=msg['content']))
+        elif msg['role'] == "assistant":
+            history_langchain_format.append(AIMessage(content=msg['content']))
+        elif msg['role'] == 'system':
+            history_langchain_format.append(SystemMessage(content=msg['content']))
+
+    chat_model = ChatOpenRouter(model_name=model_name)
+    res = chat_model.invoke(history_langchain_format)
+    content = res.content
+
+    # below are local ollama codes
+    # client = ollama.Client(host=OLLAMA_HOST)
+    # res = client.chat(
+    #     model=model_name,
+    #     messages=messages,
+    #     format="json",
+    # )
+    # content = res['message']['content']
+    return AgentAction.from_ollama(content)
 
 
 

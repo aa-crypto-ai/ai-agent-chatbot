@@ -1,5 +1,4 @@
-# pick the one matching your GPU spec - https://hub.docker.com/r/nvidia/cuda/tags
-FROM nvidia/cuda:11.6.1-base-ubuntu20.04
+FROM ubuntu:24.04
 
 # essentials
 RUN apt update && \

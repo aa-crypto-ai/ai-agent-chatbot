@@ -35,8 +35,9 @@ def cost_fn(evt: gr.SelectData):
 
 if __name__ == '__main__':
 
-    model_choices = [(model_conf['display_name'], model_name) for model_name, model_conf in models.items()]
-    model_name_default = 'mistral'
+    # only show OpenRouter API models for now, since we are not using ollama
+    model_choices = [(model_conf['display_name'], model_name) for model_name, model_conf in models.items() if not model_conf['local_model']]
+    model_name_default = 'mistralai/mistral-small-24b-instruct-2501'
 
     with gr.Blocks(title='Chatbot', fill_height=True) as demo:
 
