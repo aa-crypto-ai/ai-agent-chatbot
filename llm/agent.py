@@ -36,7 +36,7 @@ unrelated to answer seeking, you must use the final_answer tool directly."""
 search_schema = FunctionSchema(search).to_ollama()
 search_schema["function"]["parameters"]["properties"]["query"]["description"] = None
 
-def final_answer(answer: str, url: str = ""):
+def final_answer(answer: str, url: str = "", **kwargs):
     """Returns a natural language response to the user. There are two sections to be returned to the user, those are:
     - `answer`: the final natural language answer to the user's question, should provide as much context as possible.
     - `url`: the website (if found).

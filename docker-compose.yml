@@ -22,6 +22,8 @@ services:
     image: agent-chatbot
     build:
       context: .
+    volumes:
+      - ~/.ai-agent-key:/home/user/.ai-agent-key
     ports:
       - 7860:7860
     depends_on:
